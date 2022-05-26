@@ -1,0 +1,38 @@
+-- gets data where number of users is more then 4 and language is 'python'
+
+SELECT DISTINCT p.id, p.url, p.created_at, p.forked_from, p.owner_id, repos.users_cnt   FROM `ghtorrentmysql1906.MySQL1906.projects` as p
+INNER JOIN (SELECT t.repo_id, t.users_cnt, x.language FROM (SELECT pm.repo_id, count(pm.repo_id) as users_cnt FROM `ghtorrentmysql1906.MySQL1906.project_members` as pm
+                group by (pm.repo_id)
+                having users_cnt > 4) t
+            INNER JOIN ( SELECT pl.project_id, pl.language FROM `ghtorrentmysql1906.MySQL1906.project_languages` as pl
+                WHERE pl.language='python') as x 
+            ON x.project_id = t.repo_id
+            limit 100000) as repos
+ON p.id = repos.repo_id
+limit 100000;
+
+
+-- selecting relevant information for repos which size is bigger then 10MB
+
+select c.id as `commit_id`, c.author_id, c.commiter_id,c.project_id, c.created_at from `ghtorrentmysql1906.MySQL1906.commits` as c INNER JOIN `melodic-ranger-341720.repos_size.repos_with_size` as repos on c.project_id = repos.id where repos.repo_size > 10000;  
+
+-- selecting relevant information for issues where repo size is bigger then 10MB
+select i.id as `issue_id`, i.repo_id, i.reporter_id, i.assignee_id,i.pull_request,i.pull_request_id,i.created_at,i.issue_id  from `ghtorrentmysql1906.MySQL1906.issues` as i 
+INNER JOIN `melodic-ranger-341720.repos_size.repos_with_size` as repos on i.repo_id = repos.id
+where repos.repo_size > 10000;
+
+-- selecting relevant information for pull request where repo size is bigger then 10MB
+
+select p.id as `pull_request_id`, p.head_repo_id, p.base_repo_id as `repo_id` ,p.head_commit_id, p.base_commit_id,p.pullreq_id,p.intra_branch  from `ghtorrentmysql1906.MySQL1906.pull_requests` as p 
+INNER JOIN `melodic-ranger-341720.repos_size.repos_with_size` as repos on p.base_repo_id = repos.id
+where repos.repo_size > 10000;  
+
+-- selecting relevant information for watchers where repo size is bigger then 10MB
+
+select w.repo_id, w.user_id, w.created_at from `ghtorrentmysql1906.MySQL1906.watchers` as w 
+INNER JOIN `melodic-ranger-341720.repos_size.repos_with_size` as repos on w.repo_id = repos.id
+where repos.repo_size > 10000;  
+
+.
+.
+.
