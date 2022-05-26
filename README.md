@@ -2,10 +2,11 @@
 This work aims to analyse information about repositories in order to determine
 the quality of the repository and its lifespan.
 
+<h1>XXX</h1>
 # Structure of project
 1. src  - directory containing all source codes used during implementaation
-	- big_query			- the directory with queries from BigQuery
-	- data				- the directory with information about repositories
+    - big_query			- the directory with queries from BigQuery
+    - data				- the directory with information about repositories
 	- model_weights 		- the directory with pretrained weights
 	- models 			- the directory with model architectures
 	- training_utils 		- the directory with scripts needed for training
